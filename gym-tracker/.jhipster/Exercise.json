@@ -1,0 +1,46 @@
+{
+  "annotations": {
+    "changelogDate": "20251130200821"
+  },
+  "applications": ["gymTracker"],
+  "documentation": "ENTIDADES",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "muscleGroup",
+      "fieldType": "MuscleGroup",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "CHEST,BACK,LEGS,GLUTES,SHOULDERS,BICEPS,TRICEPS,CORE,FULL_BODY"
+    },
+    {
+      "fieldName": "difficulty",
+      "fieldType": "Difficulty",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "EASY,MEDIUM,HARD"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "1000"
+    }
+  ],
+  "name": "Exercise",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "workoutDate",
+      "otherEntityName": "workout",
+      "otherEntityRelationshipName": "exercises",
+      "relationshipName": "workouts",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

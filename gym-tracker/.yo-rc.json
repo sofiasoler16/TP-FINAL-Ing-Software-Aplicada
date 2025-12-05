@@ -1,0 +1,19 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "baseName": "gymTracker",
+    "buildTool": "maven",
+    "clientFramework": "angular",
+    "devDatabaseType": "h2Disk",
+    "entities": ["Exercise", "Workout"],
+    "jhipsterVersion": "8.11.0",
+    "jwtSecretKey": "MTRiZGQ2NWM5Y2NlNmYwZTcxY2E0ZTUxMDk2MGFmMGU2ZTIxZTUwYjQ0OWQ4ZTk2Y2ViYzYyMDEwZTM5MjkxYTI4MzFjOTQyNmQzZTk4M2QzMDZjOTc3YWU4MjZlOTUzMjAwYmE1ZmJjMjUzZGUwMGJiOWMwMGM1ZGMyMTUxODE=",
+    "languages": ["en"],
+    "lastLiquibaseTimestamp": 1764533361000,
+    "nativeLanguage": "en",
+    "prodDatabaseType": "postgresql",
+    "reactive": false,
+    "testFrameworks": ["cypress"]
+  }
+}

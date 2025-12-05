@@ -1,0 +1,67 @@
+application {
+  config {
+    baseName gymTracker
+    applicationType monolith
+    authenticationType jwt
+    prodDatabaseType postgresql
+    devDatabaseType h2Disk
+    buildTool maven
+    clientFramework angular
+    testFrameworks [cypress]
+    reactive false
+  }
+  entities *
+}
+
+/**
+ * ENTIDADES
+ */
+
+entity Exercise {
+  name String required,
+  muscleGroup MuscleGroup required,
+  difficulty Difficulty required,
+  description String maxlength(1000)
+}
+
+enum MuscleGroup {
+  CHEST,
+  BACK,
+  LEGS,
+  GLUTES,
+  SHOULDERS,
+  BICEPS,
+  TRICEPS,
+  CORE,
+  FULL_BODY
+}
+
+enum Difficulty {
+  EASY,
+  MEDIUM,
+  HARD
+}
+
+entity Workout {
+  workoutDate LocalDate required,
+  durationMinutes Integer min(1),
+  notes String maxlength(1000)
+}
+
+/**
+ * RELACIONES
+ * Un Workout puede tener muchos Exercises
+ * Un Exercise puede aparecer en muchos Workouts
+ */
+relationship ManyToMany {
+  Workout{exercises(name)} to Exercise{workouts(workoutDate)}
+}
+
+/**
+ * SERVICES y PAGINACIÓN (para que sea más cómodo testear y usar)
+ */
+
+service Exercise with serviceClass
+service Workout with serviceClass
+
+paginate Exercise, Workout with pagination

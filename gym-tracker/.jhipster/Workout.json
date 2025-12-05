@@ -1,0 +1,39 @@
+{
+  "annotations": {
+    "changelogDate": "20251130200921"
+  },
+  "applications": ["gymTracker"],
+  "fields": [
+    {
+      "fieldName": "workoutDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "durationMinutes",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "notes",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "1000"
+    }
+  ],
+  "name": "Workout",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "exercise",
+      "otherEntityRelationshipName": "workouts",
+      "relationshipName": "exercises",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

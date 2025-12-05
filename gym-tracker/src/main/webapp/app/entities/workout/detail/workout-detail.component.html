@@ -1,0 +1,51 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (workout(); as workoutRef) {
+      <div>
+        <h2 data-cy="workoutDetailsHeading"><span jhiTranslate="gymTrackerApp.workout.detail.title">Workout</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ workoutRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gymTrackerApp.workout.workoutDate">Workout Date</span></dt>
+          <dd>
+            <span>{{ workoutRef.workoutDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="gymTrackerApp.workout.durationMinutes">Duration Minutes</span></dt>
+          <dd>
+            <span>{{ workoutRef.durationMinutes }}</span>
+          </dd>
+          <dt><span jhiTranslate="gymTrackerApp.workout.notes">Notes</span></dt>
+          <dd>
+            <span>{{ workoutRef.notes }}</span>
+          </dd>
+          <dt><span jhiTranslate="gymTrackerApp.workout.exercises">Exercises</span></dt>
+          <dd>
+            @for (exercises of workoutRef.exercises; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/exercise', exercises.id, 'view']">{{ exercises?.name }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/workout', workoutRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

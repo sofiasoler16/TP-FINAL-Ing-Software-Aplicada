@@ -1,0 +1,144 @@
+<div>
+  <h2 id="page-heading" data-cy="ExerciseHeading">
+    <span jhiTranslate="gymTrackerApp.exercise.home.title">Exercises</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="gymTrackerApp.exercise.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-exercise"
+        [routerLink]="['/exercise/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="gymTrackerApp.exercise.home.createLabel">Create a new Exercise</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  @if (exercises().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="gymTrackerApp.exercise.home.notFound">No Exercises found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="name">
+              <div class="d-flex">
+                <span jhiTranslate="gymTrackerApp.exercise.name">Name</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="muscleGroup">
+              <div class="d-flex">
+                <span jhiTranslate="gymTrackerApp.exercise.muscleGroup">Muscle Group</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="difficulty">
+              <div class="d-flex">
+                <span jhiTranslate="gymTrackerApp.exercise.difficulty">Difficulty</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="description">
+              <div class="d-flex">
+                <span jhiTranslate="gymTrackerApp.exercise.description">Description</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (exercise of exercises(); track trackId(exercise)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/exercise', exercise.id, 'view']">{{ exercise.id }}</a>
+              </td>
+              <td>{{ exercise.name }}</td>
+              <td [jhiTranslate]="'gymTrackerApp.MuscleGroup.' + (exercise.muscleGroup ?? 'null')">
+                {{
+                  {
+                    null: '',
+                    CHEST: 'CHEST',
+                    BACK: 'BACK',
+                    LEGS: 'LEGS',
+                    GLUTES: 'GLUTES',
+                    SHOULDERS: 'SHOULDERS',
+                    BICEPS: 'BICEPS',
+                    TRICEPS: 'TRICEPS',
+                    CORE: 'CORE',
+                    FULL_BODY: 'FULL_BODY',
+                  }[exercise.muscleGroup ?? 'null']
+                }}
+              </td>
+              <td [jhiTranslate]="'gymTrackerApp.Difficulty.' + (exercise.difficulty ?? 'null')">
+                {{ { null: '', EASY: 'EASY', MEDIUM: 'MEDIUM', HARD: 'HARD' }[exercise.difficulty ?? 'null'] }}
+              </td>
+              <td>{{ exercise.description }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/exercise', exercise.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/exercise', exercise.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(exercise)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (exercises().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page, totalItems, itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

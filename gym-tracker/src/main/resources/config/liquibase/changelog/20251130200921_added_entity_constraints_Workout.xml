@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity Workout.
+    -->
+    <changeSet id="20251130200921-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="workout_id"
+                                 baseTableName="rel_workout__exercises"
+                                 constraintName="fk_rel_workout__exercises__workout_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="workout"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="exercises_id"
+                                 baseTableName="rel_workout__exercises"
+                                 constraintName="fk_rel_workout__exercises__exercises_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="exercise"
+                                 />
+    </changeSet>
+</databaseChangeLog>

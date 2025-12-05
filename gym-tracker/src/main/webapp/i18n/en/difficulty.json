@@ -1,0 +1,10 @@
+{
+  "gymTrackerApp": {
+    "Difficulty": {
+      "null": "",
+      "EASY": "EASY",
+      "MEDIUM": "MEDIUM",
+      "HARD": "HARD"
+    }
+  }
+}

@@ -1,0 +1,134 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-workout-heading" data-cy="WorkoutCreateUpdateHeading" jhiTranslate="gymTrackerApp.workout.home.createOrEditLabel">
+        Create or edit a Workout
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="gymTrackerApp.workout.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let workoutDateRef = editForm.get('workoutDate')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_workoutDate" jhiTranslate="gymTrackerApp.workout.workoutDate">Workout Date</label>
+          <div class="input-group">
+            <input
+              id="field_workoutDate"
+              data-cy="workoutDate"
+              type="text"
+              class="form-control"
+              name="workoutDate"
+              ngbDatepicker
+              #workoutDateDp="ngbDatepicker"
+              formControlName="workoutDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="workoutDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+          @if (workoutDateRef.invalid && (workoutDateRef.dirty || workoutDateRef.touched)) {
+            <div>
+              @if (editForm.get('workoutDate')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let durationMinutesRef = editForm.get('durationMinutes')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_durationMinutes" jhiTranslate="gymTrackerApp.workout.durationMinutes"
+            >Duration Minutes</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="durationMinutes"
+            id="field_durationMinutes"
+            data-cy="durationMinutes"
+            formControlName="durationMinutes"
+          />
+          @if (durationMinutesRef.invalid && (durationMinutesRef.dirty || durationMinutesRef.touched)) {
+            <div>
+              @if (editForm.get('durationMinutes')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '1' }"
+                  >This field should be at least 1.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('durationMinutes')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <span class="form-label" jhiTranslate="gymTrackerApp.workout.exercises">Exercises</span>
+
+          @for (group of muscleGroups; track group) {
+            <div class="mt-2">
+              <strong>{{ group }}</strong>
+
+              @for (exercise of exercisesByGroup[group]; track exercise.id) {
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    data-cy="exerciseCheckbox"
+                    [id]="'exercise_' + exercise.id"
+                    [checked]="isExerciseSelected(exercise)"
+                    (change)="onExerciseToggle(exercise, $any($event.target).checked)"
+                  />
+                  <label class="form-check-label" [for]="'exercise_' + exercise.id">
+                    {{ exercise.name }}
+                  </label>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        @let notesRef = editForm.get('notes')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_notes" jhiTranslate="gymTrackerApp.workout.notes">Notes</label>
+          <input type="text" class="form-control" name="notes" id="field_notes" data-cy="notes" formControlName="notes" />
+          @if (notesRef.invalid && (notesRef.dirty || notesRef.touched)) {
+            <div>
+              @if (editForm.get('notes')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '1000' }"
+                  >This field cannot be longer than 1000 characters.</small
+                >
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (exercise(); as exerciseRef) {
+      <div>
+        <h2 data-cy="exerciseDetailsHeading"><span jhiTranslate="gymTrackerApp.exercise.detail.title">Exercise</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ exerciseRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gymTrackerApp.exercise.name">Name</span></dt>
+          <dd>
+            <span>{{ exerciseRef.name }}</span>
+          </dd>
+          <dt><span jhiTranslate="gymTrackerApp.exercise.muscleGroup">Muscle Group</span></dt>
+          <dd>
+            <span [jhiTranslate]="'gymTrackerApp.MuscleGroup.' + (exerciseRef.muscleGroup ?? 'null')">{{
+              {
+                null: '',
+                CHEST: 'CHEST',
+                BACK: 'BACK',
+                LEGS: 'LEGS',
+                GLUTES: 'GLUTES',
+                SHOULDERS: 'SHOULDERS',
+                BICEPS: 'BICEPS',
+                TRICEPS: 'TRICEPS',
+                CORE: 'CORE',
+                FULL_BODY: 'FULL_BODY',
+              }[exerciseRef.muscleGroup ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="gymTrackerApp.exercise.difficulty">Difficulty</span></dt>
+          <dd>
+            <span [jhiTranslate]="'gymTrackerApp.Difficulty.' + (exerciseRef.difficulty ?? 'null')">{{
+              { null: '', EASY: 'EASY', MEDIUM: 'MEDIUM', HARD: 'HARD' }[exerciseRef.difficulty ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="gymTrackerApp.exercise.description">Description</span></dt>
+          <dd>
+            <span>{{ exerciseRef.description }}</span>
+          </dd>
+          <dt><span jhiTranslate="gymTrackerApp.exercise.workouts">Workouts</span></dt>
+          <dd>
+            @for (workouts of exerciseRef.workouts; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/workout', workouts.id, 'view']">{{ workouts?.workoutDate }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/exercise', exerciseRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

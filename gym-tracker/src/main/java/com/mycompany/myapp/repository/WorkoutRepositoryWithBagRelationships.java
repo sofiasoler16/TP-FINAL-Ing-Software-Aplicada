@@ -1,0 +1,14 @@
+package com.mycompany.myapp.repository;
+
+import com.mycompany.myapp.domain.Workout;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.data.domain.Page;
+
+public interface WorkoutRepositoryWithBagRelationships {
+    Optional<Workout> fetchBagRelationships(Optional<Workout> workout);
+
+    List<Workout> fetchBagRelationships(List<Workout> workouts);
+
+    Page<Workout> fetchBagRelationships(Page<Workout> workouts);
+}

@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Workouts</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ng-container *ngIf="loading">
+    <ion-spinner></ion-spinner>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && error">
+    <ion-text color="danger">{{ error }}</ion-text>
+  </ng-container>
+
+  <ion-list *ngIf="!loading && !error">
+    <ion-item *ngFor="let w of workouts">
+      <ion-label>
+        <h2>{{ w.workoutDate }}</h2>
+        <p>{{ w.durationMinutes }} minutos</p>
+        <p *ngIf="w.notes">{{ w.notes }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

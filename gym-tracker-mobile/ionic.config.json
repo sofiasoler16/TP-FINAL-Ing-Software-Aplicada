@@ -1,0 +1,7 @@
+{
+  "name": "gym-tracker-mobile",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

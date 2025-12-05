@@ -1,0 +1,118 @@
+<div>
+  <h2 id="page-heading" data-cy="WorkoutHeading">
+    <span jhiTranslate="gymTrackerApp.workout.home.title">Workouts</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="gymTrackerApp.workout.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-workout"
+        [routerLink]="['/workout/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="gymTrackerApp.workout.home.createLabel">Create a new Workout</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  @if (workouts().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="gymTrackerApp.workout.home.notFound">No Workouts found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="workoutDate">
+              <div class="d-flex">
+                <span jhiTranslate="gymTrackerApp.workout.workoutDate">Workout Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="durationMinutes">
+              <div class="d-flex">
+                <span jhiTranslate="gymTrackerApp.workout.durationMinutes">Duration Minutes</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col">
+              <div class="d-flex">
+                <span jhiTranslate="gymTrackerApp.workout.exercises">Exercises</span>
+              </div>
+            </th>
+
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (workout of workouts(); track trackId(workout)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/workout', workout.id, 'view']">{{ workout.id }}</a>
+              </td>
+              <td>{{ workout.workoutDate | formatMediumDate }}</td>
+              <td>{{ workout.durationMinutes }}</td>
+              <td>{{ getExerciseNames(workout) }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/workout', workout.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/workout', workout.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(workout)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (workouts().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page, totalItems, itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>
