@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        // Credenciales de DockerHub (ya las tenés)
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-sofia')
         IMAGE_NAME = "sofiasoler16044/gym-tracker"
     }
@@ -10,13 +11,16 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/sofiasoler16/tp-final.git'
+                git branch: 'main',
+                    url: 'https://github.com/sofiasoler16/tp-final.git',
+                    credentialsId: 'github-sofia'
             }
         }
 
         stage('Build Backend') {
             steps {
-                dir('backend') {
+                dir('gym-tracker') {  
+                    sh 'chmod +x mvnw' 
                     sh './mvnw -ntp -DskipTests clean package'
                 }
             }
@@ -24,7 +28,7 @@ pipeline {
 
         stage('Build Docker image') {
             steps {
-                dir('backend') {
+                dir('gym-tracker') {
                     sh '''
                         docker build -t $IMAGE_NAME:latest .
                     '''
